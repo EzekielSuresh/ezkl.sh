@@ -1,0 +1,88 @@
+/* filename: public/styles.css */
+:root {
+  --bg: #0e0e0e;
+  --fg: #e6e6e6;
+  --muted: #9aa0a6;
+  --accent: #00ff9c;
+  --border: #222;
+  --link: #a8ff60;
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", monospace;
+  line-height: 1.6;
+}
+
+.site-header,
+.site-footer {
+  border-bottom: 1px solid var(--border);
+  padding: 16px;
+}
+.site-header h1 {
+  margin: 0 0 8px;
+  font-size: 20px;
+  letter-spacing: 0.5px;
+}
+.accent {
+  color: var(--accent);
+}
+
+.nav-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+.nav-inline a {
+  color: var(--link);
+  text-decoration: none;
+}
+.nav-inline a:hover {
+  color: var(--accent);
+}
+.nav-inline .sep {
+  color: var(--muted);
+}
+
+main {
+  max-width: 720px;
+  margin: 32px auto;
+  padding: 0 16px;
+}
+.block {
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px dashed var(--border);
+}
+.block h2 {
+  font-size: 16px;
+  text-transform: lowercase;
+  margin: 0 0 8px;
+  color: var(--muted);
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.list li {
+  margin-bottom: 8px;
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+.site-footer {
+  border-top: 1px solid var(--border);
+  border-bottom: none;
+  text-align: center;
+}
