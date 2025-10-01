@@ -69,7 +69,7 @@ function renderPostPage(tpl: string, post: Post): string {
 function renderIndexPage(tpl: string, posts: Post[]): string {
     const items = posts.map(
         (p) => 
-            `<li><i class="muted">${formatDate(p.published_at)} </i><a href="/blogs/${encodeURIComponent(p.slug)}/">${p.title}</a></li>`
+            `<li><i class="muted">${formatDate(p.published_at)} </i><a href="blogs/${encodeURIComponent(p.slug)}/">${p.title}</a></li>`
     ).join("")
     return tpl.replace("{{list}}", items || `<li class="muted">no posts</li>`)
 }
@@ -91,7 +91,7 @@ function formatDate(iso: string): string {
     const posts = await fetchPosts()
 
     await rm("public", { recursive: true, force: true })
-    
+
     // output dirs
     await mkdir("public/blogs", {recursive: true})
     await mkdir("public/assets", {recursive: true})
