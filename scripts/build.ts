@@ -69,17 +69,19 @@ function renderPostPage(tpl: string, post: Post): string {
 function renderIndexPage(tpl: string, posts: Post[]): string {
     const items = posts.map(
         (p) => 
-            `<li><a href="/blogs/${encodeURIComponent(p.slug)}/">${p.title}</a><span class="muted">${formatDate(p.published_at)}</span></li>`
+            `<li><i class="muted">${formatDate(p.published_at)} </i><a href="/blogs/${encodeURIComponent(p.slug)}/">${p.title}</a></li>`
     ).join("")
     return tpl.replace("{{list}}", items || `<li class="muted">no posts</li>`)
 }
 
 function formatDate(iso: string): string {
-    try {
-        return new Date(iso).toLocaleDateString()
-    } catch {
-        return iso
-    }
+    const d = new Date(iso)
+    if(isNaN(d.getTime())) return iso
+    const day = d.getDate()
+    const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+    const mon = months[d.getMonth()]
+    const year = d.getFullYear()
+    return `${mon} ${day}, ${year}`
 }
 
 // Main build
