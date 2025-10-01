@@ -14,7 +14,8 @@ serve({
     port:3000,
     fetch(req) {
         const url = new URL(req.url) 
-        const pathname = url.pathname == "/" ? "/index.html" : url.pathname
+        let pathname = url.pathname == "/" ? "/index.html" : url.pathname
+        if (pathname.endsWith("/")) pathname = pathname + "index.html";
         const ext = pathname.slice(pathname.lastIndexOf("."))
         try {
             return new Response(file(`./public${pathname}`), {
