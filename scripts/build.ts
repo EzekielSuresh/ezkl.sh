@@ -4,7 +4,7 @@
 // DONE: Separate load template function
 // KILL: Copy default pages (e.g. index.html, about.html) to public/ 
 
-import { readFile, writeFile, mkdir } from "node:fs/promises"
+import { readFile, writeFile, mkdir, cp } from "node:fs/promises"
 import { join } from "node:path";
 
 
@@ -106,6 +106,11 @@ function formatDate(iso: string): string {
     // write blog index
     const indexHtml = renderIndexPage(indexTpl, posts)
     await writeFile(join("public", "blogs", "index.html"), indexHtml, "utf8")
+
+    await cp("src", "public", {
+        recursive: true,
+        filter: (src) => !src.includes("templates")
+    })
 
     console.log("Build complete -> public/")
 })().catch((e) => {
