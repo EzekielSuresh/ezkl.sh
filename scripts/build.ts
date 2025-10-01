@@ -4,7 +4,7 @@
 // DONE: Separate load template function
 // KILL: Copy default pages (e.g. index.html, about.html) to public/ 
 
-import { readFile, writeFile, mkdir, cp } from "node:fs/promises"
+import { readFile, writeFile, mkdir, cp, rm } from "node:fs/promises"
 import { join } from "node:path";
 
 
@@ -90,6 +90,8 @@ function formatDate(iso: string): string {
     const { postTpl, indexTpl } = await loadTemplates()
     const posts = await fetchPosts()
 
+    await rm("public", { recursive: true, force: true })
+    
     // output dirs
     await mkdir("public/blogs", {recursive: true})
     await mkdir("public/assets", {recursive: true})
