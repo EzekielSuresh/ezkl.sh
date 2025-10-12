@@ -4,7 +4,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "build": "bun scripts/build.ts",
+    "build": "OUT_DIR=public bun scripts/build.ts",
+    "build:local": "OUT_DIR=site bun scripts/build.ts",
     "dev": "bun ./scripts/dev-server.ts"
   },
   "devDependencies": {
