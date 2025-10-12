@@ -7,7 +7,6 @@
 import { readFile, writeFile, mkdir, cp, rm } from "node:fs/promises"
 import { join } from "node:path";
 
-
 type Post = {
   id: string;
   title: string;
@@ -15,6 +14,8 @@ type Post = {
   content_html: string;
   published_at: string;
 };
+
+const OUT_DIR = process.env.OUT_DIR ??  "site"
 
 const SUPABASE_URL = process.env.SUPABASE_URL ?? '';
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY ?? '';
@@ -90,15 +91,15 @@ function formatDate(iso: string): string {
     const { postTpl, indexTpl } = await loadTemplates()
     const posts = await fetchPosts()
 
-    await rm("public", { recursive: true, force: true })
+    await rm(OUT_DIR, { recursive: true, force: true })
 
     // output dirs
-    await mkdir("public/blogs", {recursive: true})
-    await mkdir("public/assets", {recursive: true})
+    await mkdir(`${OUT_DIR}/blogs`, {recursive: true})
+    await mkdir(`${OUT_DIR}/assets`, {recursive: true})
 
     // write post pages
     for (const p of posts) {
-        const outDir = join("public", "blogs", p.slug)
+        const outDir = join(OUT_DIR, "blogs", p.slug)
         await mkdir(outDir, {recursive: true})
         const html = renderPostPage(postTpl, p)
         await writeFile(join(outDir, "index.html"), html, "utf8")
@@ -107,9 +108,9 @@ function formatDate(iso: string): string {
 
     // write blog index
     const indexHtml = renderIndexPage(indexTpl, posts)
-    await writeFile(join("public", "blogs", "index.html"), indexHtml, "utf8")
+    await writeFile(join(OUT_DIR, "blogs", "index.html"), indexHtml, "utf8")
 
-    await cp("src", "public", {
+    await cp("src", OUT_DIR, {
         recursive: true,
         filter: (src) => !src.includes("templates")
     })
