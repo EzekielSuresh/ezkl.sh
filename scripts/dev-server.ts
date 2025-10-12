@@ -18,7 +18,7 @@ serve({
         if (pathname.endsWith("/")) pathname = pathname + "index.html";
         const ext = pathname.slice(pathname.lastIndexOf("."))
         try {
-            return new Response(file(`./public${pathname}`), {
+            return new Response(file(`./site${pathname}`), {
                 headers: { "Content-Type": MIME[ext] ?? "application/octet-stream"}
             })
         } catch {
