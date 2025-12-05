@@ -62,7 +62,7 @@ async function loadTemplates() {
 
 function injectBaseUrl(page: string, baseUrl: string): string {
     return page
-        .replaceAll("{{baseUrl}}", baseUrl)
+        .replaceAll("{{root}}", baseUrl)
 }
 
 function renderPostPage(tpl: string, post: Post): string {
@@ -76,7 +76,7 @@ function renderPostPage(tpl: string, post: Post): string {
 function renderIndexPage(tpl: string, posts: Post[]): string {
     const items = posts.map(
         (p) => 
-            `<li><i class="muted">${formatDate(p.published_at)} </i><a href="blogs/${encodeURIComponent(p.slug)}/">${p.title}</a></li>`
+            `<li><i class="muted">${formatDate(p.published_at)} </i><a href="{{root}}blogs/${encodeURIComponent(p.slug)}/">${p.title}</a></li>`
     ).join("")
     return tpl.replace("{{list}}", items || `<li class="muted">no posts</li>`)
 }
@@ -97,7 +97,7 @@ function formatDate(iso: string): string {
     const { postTpl, indexTpl } = await loadTemplates()
     const posts = await fetchPosts()
 
-    const baseUrl = OUT_DIR == "public" ? `/ezkl.sh/` : ``
+    const baseUrl = OUT_DIR === "public" ? `/ezkl.sh/` : `/`
 
     await rm(OUT_DIR, { recursive: true, force: true })
 
