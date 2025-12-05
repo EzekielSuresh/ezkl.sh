@@ -2,10 +2,9 @@
 // DONE: Render each post
 // DONE: Render the blog index
 // DONE: Separate load template function
-// DONE: Copy default pages (e.g. index.html, about.html) to public/ 
-// TODO: Insert <base href="/ezkl.sh/"> into pages built for public/
+// KILL: Copy default pages (e.g. index.html, about.html) to public/ 
 
-import { readFile, writeFile, mkdir, cp, rm, readdir } from "node:fs/promises"
+import { readFile, writeFile, mkdir, cp, rm } from "node:fs/promises"
 import { join } from "node:path";
 
 type Post = {
@@ -60,11 +59,6 @@ async function loadTemplates() {
     return { postTpl, indexTpl }
 }
 
-function injectBaseUrl(page: string, baseUrl: string): string {
-    return page
-        .replaceAll("{{baseUrl}}", baseUrl)
-}
-
 function renderPostPage(tpl: string, post: Post): string {
     const titleEsc = post.title
     return tpl
@@ -76,7 +70,7 @@ function renderPostPage(tpl: string, post: Post): string {
 function renderIndexPage(tpl: string, posts: Post[]): string {
     const items = posts.map(
         (p) => 
-            `<li><i class="muted">${formatDate(p.published_at)} </i><a href="./${encodeURIComponent(p.slug)}/">${p.title}</a></li>`
+            `<li><i class="muted">${formatDate(p.published_at)} </i><a href="blogs/${encodeURIComponent(p.slug)}/">${p.title}</a></li>`
     ).join("")
     return tpl.replace("{{list}}", items || `<li class="muted">no posts</li>`)
 }
@@ -97,8 +91,6 @@ function formatDate(iso: string): string {
     const { postTpl, indexTpl } = await loadTemplates()
     const posts = await fetchPosts()
 
-    const baseUrl = OUT_DIR == "public" ? "/ezkl_sh/" : ""
-
     await rm(OUT_DIR, { recursive: true, force: true })
 
     // output dirs
@@ -109,13 +101,13 @@ function formatDate(iso: string): string {
     for (const p of posts) {
         const outDir = join(OUT_DIR, "blogs", p.slug)
         await mkdir(outDir, {recursive: true})
-        const html = injectBaseUrl(renderPostPage(postTpl, p), baseUrl)
+        const html = renderPostPage(postTpl, p)
         await writeFile(join(outDir, "index.html"), html, "utf8")
         console.log(`✓ ${p.slug}`)
     }
 
     // write blog index
-    const indexHtml = injectBaseUrl(renderIndexPage(indexTpl, posts), baseUrl)
+    const indexHtml = renderIndexPage(indexTpl, posts)
     await writeFile(join(OUT_DIR, "blogs", "index.html"), indexHtml, "utf8")
 
     await cp("src", OUT_DIR, {
@@ -123,21 +115,7 @@ function formatDate(iso: string): string {
         filter: (src) => !src.includes("templates")
     })
 
-    if (baseUrl) {
-        const files = await readdir(OUT_DIR, {withFileTypes: true})
-
-        for (const file of files) {
-
-            const fullPath = join(OUT_DIR, file.name)
-            if (file.isFile() && file.name.endsWith(".html")){
-                const content = await readFile(fullPath, 'utf-8')
-                const transformed = injectBaseUrl(content, baseUrl)
-                await writeFile(fullPath, transformed, 'utf-8')
-            }
-        }
-    }
-
-    console.log(`Build complete -> ${OUT_DIR}/`)
+    console.log("Build complete -> public/")
 })().catch((e) => {
     console.error(e)
     process.exit(1)
