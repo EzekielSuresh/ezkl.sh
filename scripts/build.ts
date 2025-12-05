@@ -97,7 +97,7 @@ function formatDate(iso: string): string {
     const { postTpl, indexTpl } = await loadTemplates()
     const posts = await fetchPosts()
 
-    const baseUrl = OUT_DIR == "public" ? "/ezkl_sh/" : ""
+    const baseUrl = OUT_DIR == "public" ? `/ezkl.sh/` : ``
 
     await rm(OUT_DIR, { recursive: true, force: true })
 
