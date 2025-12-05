@@ -76,7 +76,7 @@ function renderPostPage(tpl: string, post: Post): string {
 function renderIndexPage(tpl: string, posts: Post[]): string {
     const items = posts.map(
         (p) => 
-            `<li><i class="muted">${formatDate(p.published_at)} </i><a href="./${encodeURIComponent(p.slug)}/">${p.title}</a></li>`
+            `<li><i class="muted">${formatDate(p.published_at)} </i><a href="blogs/${encodeURIComponent(p.slug)}/">${p.title}</a></li>`
     ).join("")
     return tpl.replace("{{list}}", items || `<li class="muted">no posts</li>`)
 }
