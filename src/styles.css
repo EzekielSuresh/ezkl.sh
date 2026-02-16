@@ -37,3 +37,11 @@ body {
   margin-top: 30px;
   border: 1px dashed;
 }
+
+code {
+  font-family: monospace;
+  background-color: #edf1f5;
+  padding: 0 0.5em;
+  border-radius: 3px;
+  /* font-size: 0.95em; */
+}
