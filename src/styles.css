@@ -46,6 +46,11 @@ code {
   /* font-size: 0.95em; */
 }
 
+pre.src {
+    position: relative;
+    overflow: auto;
+}
+
 pre {
   border: 1px solid #e6e6e6;
   border-radius: 3px;
